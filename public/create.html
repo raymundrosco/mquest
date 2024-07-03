@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="styles/index.css">
+   <title>Quest Registration</title>
+</head>
+
+<body>
+   <div class="container">
+      <h1>Enter your Quest here</h1>
+      <form id="registerForm">
+         <div class="form-group">
+            <label for="questTitle">Quest title</label>
+            <input type="text" placeholder="Enter a title" id="questTitle">
+         </div>
+         <div class="form-group">
+            <label for="questContent">Quest content</label>
+            <input type="text" placeholder="Enter the quest description" id="questContent">
+         </div>
+         <div class="form-group">
+            <input type="submit" value="Submit" id="submitData">
+         </div>
+      </form>
+      <a href="view.html">View Submitted Quests</a>
+      <p class="createQuest"> <button type="button" id="logoutButton">Log out</button> </p>
+   </div>
+
+   <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+      import { getFirestore, addDoc, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+      import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"; // Import signOut function
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+         apiKey: "AIzaSyA0UdwF1Aubqz9KVes4GaJzhGDSu49bOHg",
+         authDomain: "testproject-2-427606.firebaseapp.com",
+         projectId: "testproject-2-427606",
+         storageBucket: "testproject-2-427606.appspot.com",
+         messagingSenderId: "277369487861",
+         appId: "1:277369487861:web:133b336b581036c6b9e0bc",
+         measurementId: "G-6VZZ0P0JJ1"
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const db = getFirestore(app);
+      const auth = getAuth();
+
+      // Add event listener to the form
+      document.getElementById('registerForm').addEventListener("submit", async (e) => {
+         e.preventDefault(); // Prevent the default form submission behavior
+
+         // Fetch the latest values from the input fields
+         const questTitle = document.getElementById('questTitle').value;
+         const questContent = document.getElementById('questContent').value;
+
+         const user = auth.currentUser;
+         const userEmail = user ? user.email : null;
+
+         try {
+            const docRef = await addDoc(collection(db, "quests"), {
+               questTitle: questTitle,
+               questContent: questContent,
+               userEmail: userEmail
+            });
+            alert("Quest Added Successfully!");
+            // You may add additional actions here if needed
+         } catch (e) {
+            console.error("Failed to Post Quest!", e);
+         }
+      });
+
+      // Add event listener to logout button
+      document.getElementById('logoutButton').addEventListener('click', async () => {
+         try {
+            await signOut(auth);
+            alert("Logged out successfully!");
+            window.location.href = "login.html";
+         } catch (error) {
+            console.error("Error signing out: ", error);
+            alert("Failed to logout. Please try again.");
+         }
+      });
+   </script>
+
+</body>
+
+</html>

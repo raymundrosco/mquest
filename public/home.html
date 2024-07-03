@@ -159,7 +159,7 @@
     </div>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, setDoc, addDoc, deleteDoc, getDocs, doc, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, addDoc, setDoc, deleteDoc, getDocs, doc, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
@@ -179,7 +179,7 @@
         const db = getFirestore(app);
         const auth = getAuth();
 
-        submitQuest.addEventListener('click', (e) => {
+        submitQuest.addEventListener('click', async (e) => {
             const user = auth.currentUser;
             if (user != null) {
               console.log(user.email);
@@ -188,25 +188,32 @@
             var title = document.getElementById('title').value;
             var details = document.getElementById('textareaCreate').value;
 
-            author = getUsers(userEmail);
+            var author = getUsers(userEmail);
 
-            addDoc(collection(db, "quests"), {
+            try {
+              const docRef = await addDoc(collection(db, "quests"), {
                 title: title,
-                author: userEmail,
                 details: details,
                 reward: 5,
-                status: "Open"
-            })
-
-            alert('Quest Added');
+                accepted: false,
+                done: false
+              })
+              alert('Quest Added');
+              $("#modalPost").modal("hide");  
+            } catch (e) {
+              console.error("Failed to Post Quest!", e);
+            }
         })
 
-        async function getUsers() {
+        async function getUsers(userEmail) {
           var current = null;
           const querySnapshot = await getDocs(collection(db, "users"))
           querySnapshot.forEach((doc) => {
             const data = doc.data();
-            if (data.userEmail == )
+            if (data.userEmail == userEmail) {
+              console.log(data.userName);
+              return data.userName;
+            }
             console.log(data.userName);
           })
         }
