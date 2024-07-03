@@ -26,11 +26,7 @@
           <form id="registerForm">
               <div class="form-group">
                 <i class="fa fa-user"></i>
-                <input
-                  type="text"
-                  id="username"
-                  placeholder="Username"
-                  name="username"
+                <input type="text" id="userName" placeholder="Username"
                   required
                 />
               </div>
@@ -41,7 +37,7 @@
                 </div>
                 <input
                   type="email"
-                  id="email"
+                  id="userEmail"
                   placeholder="Email"
                 />
               </div>
@@ -50,7 +46,7 @@
                 <i class="fa fa-key"></i>
                 <input
                   type="password"
-                  id="password"
+                  id="userPassword"
                   placeholder="Password"
                 />
                 <i id="showpass" class="fa fa-eye-slash"></i>
@@ -76,8 +72,9 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+        import { getFirestore, setDoc, addDoc, deleteDoc, getDocs, doc, collection} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-      const firebaseConfig = {
+        const firebaseConfig = {
           apiKey: "AIzaSyAL3NGHFIDXyOGpuYRwgTOOw-iIubf6KgE",
           authDomain: "daanoymichael.firebaseapp.com",
           databaseURL: "https://daanoymichael-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -87,31 +84,32 @@
           appId: "1:167008676312:web:4a44cb5ab117c522ddaaad",
           measurementId: "G-B8G3DNFPHY"
         };
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth();
+        const db = getFirestore(app);
 
-      const app = initializeApp(firebaseConfig);
-      const analytics = getAnalytics(app);
-      const auth = getAuth();
-      const db = getFirestore(app);
 
       document.getElementById("registerForm").addEventListener("submit", async (e) => {
             e.preventDefault();
-            console.log("creating");
 
-            const userName = document.getElementById('username').value;
-            const userEmail = document.getElementById('email').value;
-            const userPassword = document.getElementById('password').value;
+            const userName = document.getElementById('userName').value;
+            const userEmail = document.getElementById('userEmail').value;
+            const userPassword = document.getElementById('userPassword').value;
 
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, userEmail, userPassword);
                 const user = userCredential.user;
 
-                await addDoc(collection(db, "users"), {
+                await addDoc(collection(db, "users", userEmail), {
                     userName: userName,
                     userEmail: userEmail,
-                    userPassword: userPassword
+                    userPassword: userPassword,
+                    magiCoins: 0,
+                    acceptedQuests: [],
+                    createdQuests: []
                 });
-
-                alert("Registration successful!");
+                window.location.assign("./login.html");
                 console.log("User registered with email: ", userEmail);
             } catch (e) {
                 const errorCode = e.code;
@@ -119,7 +117,7 @@
                 alert(`Error: ${errorMessage}`);
                 console.error("Error registering: ", errorCode, errorMessage);
             }
-        });;
+        });
     </script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
