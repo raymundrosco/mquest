@@ -159,7 +159,7 @@
     </div>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, setDoc, addDoc, deleteDoc, getDocs, doc, collection} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, setDoc, addDoc, deleteDoc, getDocs, doc, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
@@ -179,26 +179,20 @@
         const db = getFirestore(app);
         const auth = getAuth();
 
-        onAuthStateChanged(auth, (user) => {
-          if (user) {
-            const uid = user.uid;
-          } else {
-          }
-        });
-
-        const user = auth.currentUser;
-
         submitQuest.addEventListener('click', (e) => {
+            const user = auth.currentUser;
+            if (user != null) {
+              console.log(user.email);
+            }
+            var userEmail = user.email;
             var title = document.getElementById('title').value;
             var details = document.getElementById('textareaCreate').value;
 
-            if (user !== null) {
-              const author = user.userEmail;
-            }
+            author = getUsers(userEmail);
 
             addDoc(collection(db, "quests"), {
                 title: title,
-                author: author,
+                author: userEmail,
                 details: details,
                 reward: 5,
                 status: "Open"
@@ -206,6 +200,16 @@
 
             alert('Quest Added');
         })
+
+        async function getUsers() {
+          var current = null;
+          const querySnapshot = await getDocs(collection(db, "users"))
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            if (data.userEmail == )
+            console.log(data.userName);
+          })
+        }
 
         // deleteQuest.addEventListener('click', (e) => {
         //     deleteDoc(doc(
