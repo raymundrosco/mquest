@@ -1,0 +1,135 @@
+*{
+    box-sizing: border-box;
+    margin:0;
+    padding:0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+
+.main{
+    display:flex;
+    flex-direction: row;
+}
+
+
+
+.container {
+  width: 400px;
+  margin: 50px auto;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.logo img {
+  width: 100px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+input[type="text"], input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+}
+
+input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  margin: 10px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.forgot {
+  text-align: right;
+  margin-bottom: 10px;
+}
+
+.forgot a {
+  color: #333;
+  text-decoration: none;
+}
+
+.create {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.create a {
+  color: #333;
+  text-decoration: none;
+}
+
+.form-group{
+    display: flex;
+    padding: 1rem;
+    column-gap: .5rem;
+    margin-bottom: 1rem;
+    background-color: gainsboro;
+}
+
+.form-group > i{
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.form-group > input{
+    background-color: gainsboro;
+    border: 0;
+    padding:0;
+    margin:0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+h2{
+    text-align: center;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+input:focus{
+    outline: none;
+}
+
+.login-desc{
+    text-align: center;
+    color: gray;
+    font-size: .80rem;
+    margin-bottom: 1rem;
+}
+
+#showpass{
+    transition: all .2s ease;
+}
+
+#showpass:hover{
+    cursor: pointer;
+}

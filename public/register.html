@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="./styles/register.css" />
+  </head>
+  <body>
+    <div class="main">
+      <div class="adnupic">
+        <img src="./assets/adnu-bg.jpg" />
+      </div>
+
+      <div class="login">
+        <div class="container">
+          <div class="logo">
+            <img src="./assets/Title&Logo.png" alt="Logo" />
+          </div>
+
+          <h2>Create Account</h2>
+          <p class="login-desc">
+            Please enter your credentials to Create Account.
+          </p>
+          <form id="registerForm">
+              <div class="form-group">
+                <i class="fa fa-user"></i>
+                <input
+                  type="text"
+                  id="username"
+                  placeholder="Username"
+                  name="username"
+                  required
+                />
+              </div>
+  
+              <div class="form-group">
+                <div class="imageemail">
+                  <img src="./assets/email.png" />
+                </div>
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="Email"
+                />
+              </div>
+  
+              <div class="form-group">
+                <i class="fa fa-key"></i>
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="Password"
+                />
+                <i id="showpass" class="fa fa-eye-slash"></i>
+              </div>
+              <div class="forgot">
+                <a href="#">Forgot Password?</a>
+              </div>
+  
+              <input type="checkbox" id="remember" name="remember" />
+              <label for="remember">Remember me</label>
+  
+              <button id="signup" type="submit">Sign Up</button>
+          </form>
+
+            <div class="haveaccount">
+              <a href="./login.html">Already have an account?</a>
+            </div>
+        </div>
+      </div>
+    </div>
+    <script type="module">
+        import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+
+      const firebaseConfig = {
+          apiKey: "AIzaSyAL3NGHFIDXyOGpuYRwgTOOw-iIubf6KgE",
+          authDomain: "daanoymichael.firebaseapp.com",
+          databaseURL: "https://daanoymichael-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "daanoymichael",
+          storageBucket: "daanoymichael.appspot.com",
+          messagingSenderId: "167008676312",
+          appId: "1:167008676312:web:4a44cb5ab117c522ddaaad",
+          measurementId: "G-B8G3DNFPHY"
+        };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const auth = getAuth();
+      const db = getFirestore(app);
+
+      document.getElementById("registerForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            console.log("creating");
+
+            const userName = document.getElementById('username').value;
+            const userEmail = document.getElementById('email').value;
+            const userPassword = document.getElementById('password').value;
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, userEmail, userPassword);
+                const user = userCredential.user;
+
+                await addDoc(collection(db, "users"), {
+                    userName: userName,
+                    userEmail: userEmail,
+                    userPassword: userPassword
+                });
+
+                alert("Registration successful!");
+                console.log("User registered with email: ", userEmail);
+            } catch (e) {
+                const errorCode = e.code;
+                const errorMessage = e.message;
+                alert(`Error: ${errorMessage}`);
+                console.error("Error registering: ", errorCode, errorMessage);
+            }
+        });;
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const loadEl = document.querySelector("#load");
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+        // // The Firebase SDK is initialized and available here!
+        //
+        // firebase.auth().onAuthStateChanged(user => { });
+        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+        // firebase.firestore().doc('/foo/bar').get().then(() => { });
+        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
+        // firebase.messaging().requestPermission().then(() => { });
+        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+        // firebase.analytics(); // call to activate
+        // firebase.analytics().logEvent('tutorial_completed');
+        // firebase.performance(); // call to activate
+        //
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+
+        try {
+          let app = firebase.app();
+          let features = [
+            "auth",
+            "database",
+            "firestore",
+            "functions",
+            "messaging",
+            "storage",
+            "analytics",
+            "remoteConfig",
+            "performance",
+          ].filter((feature) => typeof app[feature] === "function");
+          loadEl.textContent = `Firebase SDK loaded with ${features.join(
+            ", "
+          )}`;
+        } catch (e) {
+          console.error(e);
+          loadEl.textContent =
+            "Error loading the Firebase SDK, check the console.";
+        }
+      });
+    </script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+      integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      $(document).ready(function () {
+        $("#showpass").click(function () {
+          if ($(this).hasClass("fa-eye")) {
+            $(this).removeClass("fa-eye").addClass("fa-eye-slash");
+            $("#password").attr("type", "password");
+          } else {
+            $(this).removeClass("fa-eye-slash").addClass("fa-eye");
+            $("#password").attr("type", "text");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
