@@ -91,32 +91,29 @@
 
 
       document.getElementById("registerForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
-
-            const userName = document.getElementById('userName').value;
-            const userEmail = document.getElementById('userEmail').value;
-            const userPassword = document.getElementById('userPassword').value;
-
-            try {
-                const userCredential = await createUserWithEmailAndPassword(auth, userEmail, userPassword);
-                const user = userCredential.user;
-
-                await addDoc(collection(db, "users", userEmail), {
-                    userName: userName,
-                    userEmail: userEmail,
-                    userPassword: userPassword,
-                    magiCoins: 0,
-                    acceptedQuests: [],
-                    createdQuests: []
-                });
-                window.location.assign("./login.html");
-                console.log("User registered with email: ", userEmail);
-            } catch (e) {
-                const errorCode = e.code;
-                const errorMessage = e.message;
-                alert(`Error: ${errorMessage}`);
-                console.error("Error registering: ", errorCode, errorMessage);
-            }
+          e.preventDefault();
+          const userName = document.getElementById('userName').value;
+          const userEmail = document.getElementById('userEmail').value;
+          const userPassword = document.getElementById('userPassword').value;
+          try {
+              const userCredential = await createUserWithEmailAndPassword(auth, userEmail, userPassword);
+              const user = userCredential.user;
+              await setDoc(doc(db, "users", userEmail), {
+                  userName: userName,
+                  userEmail: userEmail,
+                  userPassword: userPassword,
+                  magiCoins: 0,
+                  acceptedQuests: [],
+                  createdQuests: []
+              });
+              window.location.assign("./login.html");
+              console.log("User registered with email: ", userEmail);
+          } catch (e) {
+              const errorCode = e.code;
+              const errorMessage = e.message;
+              alert(`Error: ${errorMessage}`);
+              console.error("Error registering: ", errorCode, errorMessage);
+          }
         });
     </script>
     <script>
