@@ -23,7 +23,7 @@
 
         <p id="profileName" class="name">Christian</p>
 
-        <p class="coinCount"><img src="./assets/magicoin.png" alt="" />50</p>
+        <p class="coinCount"><img src="./assets/magicoin.png" alt="" /><span id="coinCount"></span></p>
       </div>
       <div class="links">
         <a class="active"
@@ -169,6 +169,8 @@
         updateDoc,
         doc,
         collection,
+        query,
+        where
       } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
       import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
       import {
@@ -194,11 +196,13 @@
       const auth = getAuth();
       let selectedQuestId;
       let currentLoggedUser;
+      let acceptedBy;
       
       onAuthStateChanged(auth, (user) => {
         if (user) {
           currentLoggedUser = auth.currentUser;
           console.log(currentLoggedUser.email);
+          
           // getUserName(currentLoggedUser.email)
           document.getElementById("profileName").innerHTML = currentLoggedUser.email
 
@@ -259,7 +263,25 @@
         });
       }
 
+      async function getCoins(userEmail) {
+   
+        const querySnapshot = await getDocs(collection(db, "users"));
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          if (data.userEmail == userEmail) {
+            document.getElementById("coinCount").innerHTML=data.magiCoins;
+            console.log("get coins: ", data.magiCoins);
+            return data.magiCoins;
+          }
+        });
+
+      }
+
+   
+
       async function displayQuests() {
+
+
         const querySnapshot = await getDocs(collection(db, "quests"));
         const questsList = document.getElementById("questsList");
         const myQuests = document.getElementById("myQuests");
@@ -267,7 +289,7 @@
         myQuests.innerHTML="";
         querySnapshot.forEach((doc) => {
           const quest = doc.data();
-          console.log(quest);
+        
           const questItem = document.createElement("div");
           questItem.className = "quest";
           questItem.id = `${doc.id}`;
@@ -325,17 +347,23 @@
           noquest.innerHTML = "You haven't posted any quests!";
           myQuests.appendChild(noquest);
         }
+
+        const coins = getCoins(currentLoggedUser.email);
+      
+
       }
 
       displayQuests();
 
       $(document).on("click", ".quest", function () {
         selectedQuestId = $(this)[0].id;
+        
         var title = $(this).find(".title-quest").html();
         var desc = $(this).find(".quest-desc").html();
         var creator = $(this).find(".title-creator").attr('data-val');
         var status = $(this).find(".queststatus").html();
         var acceptedby = $(this).find(".questaccepted").html();
+        acceptedBy = acceptedby;
         $("#modalTitle").html(title);
         $("#modalBody").html(desc);
         $("#modalQuestGiver").html(creator);
@@ -388,6 +416,9 @@
 
       async function turninQuest() {
         const questRef = doc(db, "quests", selectedQuestId);
+        
+
+
         const questDoc = await getDoc(questRef);
         $("#modalQuest").modal("hide");
         if (currentLoggedUser.email == questDoc.data().author) {
@@ -492,9 +523,8 @@
             ", "
           )}`;
         } catch (e) {
-          console.error(e);
-          loadEl.textContent =
-            "Error loading the Firebase SDK, check the console.";
+          console.log(e);
+          
         }
       });
     </script>

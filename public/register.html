@@ -50,12 +50,7 @@
                 />
                 <i id="showpass" class="fa fa-eye-slash"></i>
               </div>
-              <div class="forgot">
-                <a href="#">Forgot Password?</a>
-              </div>
-  
-              <input type="checkbox" id="remember" name="remember" />
-              <label for="remember">Remember me</label>
+
   
               <button id="signup" type="submit">Sign Up</button>
           </form>
@@ -157,26 +152,21 @@
       });
     </script>
     <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
+      src="./scripts/jquery.min.js"
     ></script>
     <!-- Latest compiled and minified JavaScript -->
     <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
-      integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-      crossorigin="anonymous"
+      src="./scripts/bootstrap.min.js"
     ></script>
     <script>
       $(document).ready(function () {
         $("#showpass").click(function () {
           if ($(this).hasClass("fa-eye")) {
             $(this).removeClass("fa-eye").addClass("fa-eye-slash");
-            $("#password").attr("type", "password");
+            $("#userPassword").attr("type", "password");
           } else {
             $(this).removeClass("fa-eye-slash").addClass("fa-eye");
-            $("#password").attr("type", "text");
+            $("#userPassword").attr("type", "text");
           }
         });
       });

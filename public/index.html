@@ -23,8 +23,8 @@
         <form id="loginForm">
           
             <div class="form-group">
-                <i class="fa fa-user"></i>
-                <input type="text" id="userEmail" placeholder="Username" name="username" required>
+                <i class="fa fa-envelope"></i>
+                <input type="text" id="userEmail" placeholder="Email" name="username" required>
             </div>
           
             <div class="form-group">
@@ -32,12 +32,12 @@
                 <input type="password" id="userPassword" placeholder="Password" name="password" required>
                 <i id="showpass" class="fa fa-eye-slash"></i>
             </div>
-            <div class="forgot">
+            <!-- <div class="forgot">
             <a href="#">Forgot Password?</a>
             </div>
 
             <input type="checkbox" id="remember" name="remember">
-            <label for="remember">Remember me</label>
+            <label for="remember">Remember me</label> -->
 
             <button type="submit" href="">Log in</button>
 
@@ -111,11 +111,11 @@
         $("#showpass").click(function(){
             if($(this).hasClass("fa-eye")){
                 $(this).removeClass("fa-eye").addClass("fa-eye-slash");
-                $("#password").attr('type', 'password');
+                $("#userPassword").attr('type', 'password');
                 
             }else{
                 $(this).removeClass("fa-eye-slash").addClass("fa-eye");
-                $("#password").attr('type', 'text');
+                $("#userPassword").attr('type', 'text');
             }
 
         });
