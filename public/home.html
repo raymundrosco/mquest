@@ -53,8 +53,7 @@
         <input type="text" id="searchText" placeholder="Search for quest" />
       </div>
 
-      <div class="quest-logs" id="questsList">
-      </div>
+      <div class="quest-logs" id="questsList"></div>
     </main>
 
     <div
@@ -73,14 +72,34 @@
             </div>
           </div>
           <div class="modal-body">
-            <input type="text" placeholder="Enter Quest Title" name="title" id="title" required>
-            <textarea id="textareaCreate" placeholder="Enter Quest Details"></textarea>
+            <input
+              type="text"
+              placeholder="Enter Quest Title"
+              name="title"
+              id="title"
+              required
+            />
+            <textarea
+              id="textareaCreate"
+              placeholder="Enter Quest Details"
+            ></textarea>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
               Cancel
             </button>
-            <button id="submitQuest" name="submitQuest" type="button" class="btn btn-primary">Submit</button>
+            <button
+              id="submitQuest"
+              name="submitQuest"
+              type="button"
+              class="btn btn-primary"
+            >
+              Submit
+            </button>
           </div>
         </div>
       </div>
@@ -107,96 +126,100 @@
             <button type="button" class="btn btn-danger" data-dismiss="modal">
               Decline
             </button>
-            <button type="button" class="btn btn-success">Accept</button>
+            <button id="acceptBtn" type="button" class="btn btn-success">
+              Accept
+            </button>
           </div>
         </div>
       </div>
     </div>
-    
+
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, addDoc, setDoc, deleteDoc, getDocs, doc, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import {
+        getFirestore,
+        addDoc,
+        setDoc,
+        deleteDoc,
+        getDocs,
+        doc,
+        collection,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-        const firebaseConfig = {
-          apiKey: "AIzaSyAL3NGHFIDXyOGpuYRwgTOOw-iIubf6KgE",
-          authDomain: "daanoymichael.firebaseapp.com",
-          databaseURL: "https://daanoymichael-default-rtdb.asia-southeast1.firebasedatabase.app",
-          projectId: "daanoymichael",
-          storageBucket: "daanoymichael.appspot.com",
-          messagingSenderId: "167008676312",
-          appId: "1:167008676312:web:4a44cb5ab117c522ddaaad",
-          measurementId: "G-B8G3DNFPHY"
-        };
-      
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const db = getFirestore(app);
-        const auth = getAuth();
+      const firebaseConfig = {
+        apiKey: "AIzaSyAL3NGHFIDXyOGpuYRwgTOOw-iIubf6KgE",
+        authDomain: "daanoymichael.firebaseapp.com",
+        databaseURL:
+          "https://daanoymichael-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "daanoymichael",
+        storageBucket: "daanoymichael.appspot.com",
+        messagingSenderId: "167008676312",
+        appId: "1:167008676312:web:4a44cb5ab117c522ddaaad",
+        measurementId: "G-B8G3DNFPHY",
+      };
 
-        submitQuest.addEventListener('click', async (e) => {
-            const user = auth.currentUser;
-            if (user != null) {
-              console.log(user.email);
-            }
-            var userEmail = user.email;
-            var title = document.getElementById('title').value;
-            var details = document.getElementById('textareaCreate').value;
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const db = getFirestore(app);
+      const auth = getAuth();
 
-            var author = getUsers(userEmail);
+      submitQuest.addEventListener("click", async (e) => {
+        const user = auth.currentUser;
+        var userEmail = user.email;
+        var title = document.getElementById("title").value;
+        var details = document.getElementById("textareaCreate").value;
 
-            try {
-              const docRef = await addDoc(collection(db, "quests"), {
-                title: title,
-                author: userEmail,
-                details: details,
-                reward: 5,
-                accepted: false,
-                done: false
-              })
-              alert('Quest Added');
-              $("#modalPost").modal("hide");  
-               window.location.reload()
-            } catch (e) {
-              console.error("Failed to Post Quest!", e);
-            }
-        })
+        var author = getUsers(userEmail);
 
-        async function getUsers(userEmail) {
-          var current = null;
-          const querySnapshot = await getDocs(collection(db, "users"))
-          querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            if (data.userEmail == userEmail) {
-              console.log(data.userName);
-              return data.userName;
-            }
-            console.log(data.userName);
-          })
+        try {
+          const docRef = await addDoc(collection(db, "quests"), {
+            title: title,
+            author: userEmail,
+            details: details,
+            reward: 5,
+            accepted: false,
+            done: false,
+          });
+          alert("Quest Added");
+          $("#modalPost").modal("hide");
+          window.location.reload();
+        } catch (e) {
+          console.error("Failed to Post Quest!", e);
         }
+      });
 
-        async function displayQuests() {
-         const querySnapshot = await getDocs(collection(db, "quests"));
-         const questsList = document.getElementById('questsList');
-         questsList.innerHTML = ""; // Clear the list
-         querySnapshot.forEach((doc) => {
-           const quest = doc.data();
-           console.log(quest.title);
-            const questItem = document.createElement('div');
-            questItem.className = "quest";
-            questItem.innerHTML = `<p class="title-quest">${quest.title}</p><p class="title-creator">${quest.author}</p><p>${quest.details}</p>`;
-            questsList.appendChild(questItem);
-            // questItem.innerHTML = `<h3><a href="#" onclick="showQuestDetails('${doc.id}')">${quest.questTitle}</a></h3><p><a href="#" onclick="showQuestDetails('${doc.id}')">${quest.questContent}</a></p>`;
-            // questsList.appendChild(questItem);
-         });
+      async function getUsers(userEmail) {
+        var current = null;
+        const querySnapshot = await getDocs(collection(db, "users"));
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          if (data.userEmail == userEmail) {
+            return data.userName;
+          }
+        });
+      }
+
+      async function displayQuests() {
+        const querySnapshot = await getDocs(collection(db, "quests"));
+        const questsList = document.getElementById("questsList");
+        questsList.innerHTML = ""; // Clear the list
+        querySnapshot.forEach((doc) => {
+          const quest = doc.data();
+          const questItem = document.createElement("div");
+          questItem.className = "quest";
+          questItem.innerHTML = `<p class="title-quest">${quest.title}</p><p class="title-creator">${quest.author}</p><p class="quest-desc">${quest.details}</p>`;
+          questsList.appendChild(questItem);
+        });
       }
 
       displayQuests();
 
-      var questDiv = document.getElementsByClassName("quest");
-
-      questDiv.addEventListener('click', () => {
+      $(document).on("click", ".quest", function () {
         console.log("open");
         var title = $(this).find(".title-quest").html();
         var desc = $(this).find(".quest-desc").html();
@@ -205,7 +228,7 @@
         $("#modalBody").html(desc);
         $("#modalQuestGiver").html(creator);
         $("#modalQuest").modal("show");
-      })
+      });
     </script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
@@ -262,17 +285,6 @@
     ></script>
     <script>
       $(document).ready(function () {
-        // $("div.quest").click(function () {
-        //   console.log("open");
-        //   var title = $(this).find(".title-quest").html();
-        //   var desc = $(this).find(".quest-desc").html();
-        //   var creator = $(this).find(".title-creator").html();
-        //   $("#modalTitle").html(title);
-        //   $("#modalBody").html(desc);
-        //   $("#modalQuestGiver").html(creator);
-        //   $("#modalQuest").modal("show");
-        // });
-
         $("#questBtn").click(function () {
           $("#textareaCreate").val("");
           $("#modalPost").modal("show");
@@ -281,13 +293,13 @@
         $("#searchText").keyup(function () {
           var searchVal = $(this).val();
 
-        $(".quest-logs")
-          .children()
-          .each(function () {
-            $(this).toggle(
-              $(this).text().toLowerCase().indexOf(searchVal) > -1
-            );
-          });
+          $(".quest-logs")
+            .children()
+            .each(function () {
+              $(this).toggle(
+                $(this).text().toLowerCase().indexOf(searchVal) > -1
+              );
+            });
         });
       });
     </script>
