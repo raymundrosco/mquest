@@ -7,11 +7,22 @@
 body {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
+  height: 100svh;
 }
 
 .main{
-    display:flex;
-    flex-direction: row;
+    display:grid;
+    min-height: 100dvh;
+    grid-template-columns: 2fr 1fr;
+    
+}
+
+.adnupic{
+  background-image: url("../assets/adnu-bg.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position-x: center;
+
 }
 
 
@@ -117,6 +128,12 @@ h2{
 }
 input:focus{
     outline: none;
+}
+
+.login{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .login-desc{

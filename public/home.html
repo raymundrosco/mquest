@@ -38,7 +38,7 @@
           ><i class="fa fa-user"></i>
           <p>ABOUT</p></a
         >
-        <a href="./login.html"
+        <a href="./index.html"
           ><i class="fa fa-arrow-left"></i>
           <p>LOG OUT</p></a
         >
@@ -46,24 +46,43 @@
     </nav>
 
     <main>
-      <h1 class="page-title">QUESTS</h1>
-
+ 
       <div class="post-container">
-        <button class="questBtn" id="questBtn">Post a Quest</button>
-        <input type="text" id="searchText" placeholder="Search for quest" />
+        <!-- <button class="questBtn" id="questBtn">Post a Quest</button> -->
+        
       </div>
 
-      <div class="quest-logs" id="questsList"></div>
+      
+
+
+      <ul class="nav nav-tabs">
+        <li class="active navcustom"><a data-toggle="tab" href="#nav-yourquest">Posted Quests</a></li>
+        <li class="navcustom"><a data-toggle="tab" href="#nav-otherquest">Others' Quests</a></li>
+      </ul>
+    
+      <div class="tab-content">
+        <div id="nav-yourquest" class="tab-pane fade in active">
+          <div class="postedquests">
+            <h3>Posted Quests</h3>
+            <button class="questBtn" id="questBtn">Post a Quest</button>
+          </div>
+          <div class="quest-logs" id="myQuests"></div>
+          
+        </div>
+        <div id="nav-otherquest" class="tab-pane fade">
+          <div class="postedquests">
+            <h3>Others' Quests</h3>
+            <input type="text" id="searchText" placeholder="Search for quest" />
+          </div>
+          
+          <div class="quest-logs" id="questsList"></div>
+        </div>
+      </div>
+
+      
     </main>
 
-    <div
-      class="modal fade"
-      id="modalPost"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="exampleModalLongTitle"
-      aria-hidden="true"
-    >
+    <div class="modal fade" id="modalPost" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -72,17 +91,16 @@
             </div>
           </div>
           <div class="modal-body">
-            <input
-              type="text"
-              placeholder="Enter Quest Title"
-              name="title"
-              id="title"
-              required
-            />
-            <textarea
-              id="textareaCreate"
-              placeholder="Enter Quest Details"
-            ></textarea>
+
+            <div class="form-group">
+              <label>Quest Title</label>
+              <input type="text" placeholder="Enter Quest Title" name="title" id="title" required/>
+            </div>
+            
+            <div class="form-group">
+              <label>Quest Description</label>
+              <textarea id="textareaCreate" placeholder="Enter Quest Details"></textarea>
+            </div>
           </div>
           <div class="modal-footer">
             <button
@@ -124,11 +142,14 @@
           </div>
           <div class="modal-body" id="modalBody">...</div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">
+            <button type="button" id="declineBtn" class="btn btn-danger" data-dismiss="modal">
               Decline
             </button>
             <button id="acceptBtn" type="button" class="btn btn-success">
               Accept
+            </button>
+            <button id="turninBtn" type="button" class="btn btn-primary">
+              Turn In
             </button>
           </div>
         </div>
@@ -233,17 +254,69 @@
       async function displayQuests() {
         const querySnapshot = await getDocs(collection(db, "quests"));
         const questsList = document.getElementById("questsList");
+        const myQuests = document.getElementById("myQuests");
         questsList.innerHTML = ""; // Clear the list
+        myQuests.innerHTML="";
         querySnapshot.forEach((doc) => {
           const quest = doc.data();
+          console.log(quest);
+          const questItem = document.createElement("div");
+          questItem.className = "quest";
+          questItem.id = `${doc.id}`;
+
+
+          const questStatus = document.createElement("span");
+          var status = "Available";
+          questStatus.className = "queststatus badge badge-primary";
+          if(quest.accepted!="" && quest.done == false){
+            status="On going";
+            questStatus.className="queststatus badge badge-warning";
+
+            if(quest.accepted!=currentLoggedUser.email){
+              status="Taken";
+              questStatus.className="queststatus badge badge-secondary";
+            }
+          }else if(quest.accepted!="" && quest.done == true){
+            status="Completed";
+            questStatus.className="queststatus badge badge-success";
+          }
+          questStatus.innerHTML = status;
+          questItem.innerHTML = `<div class="quest-main">
+                                    <p class="title-quest">${quest.title}</p>
+                                    <p class="title-creator" data-val="${quest.author}">Quest given by ${quest.author}</p>
+                                    <p class="quest-desc">${quest.details}</p>
+                                  </div>`;
+    
+          questItem.appendChild(questStatus);
+          
+
+
+          const questAccepted = document.createElement("span");
+          questAccepted.className = "questaccepted";
+          questAccepted.innerHTML = quest.accepted;
+          questItem.appendChild(questAccepted);
+         
+
+
           if (quest.author != currentLoggedUser.email) {
-            const questItem = document.createElement("div");
-            questItem.className = "quest";
-            questItem.id = `${doc.id}`;
-            questItem.innerHTML = `<p class="title-quest">${quest.title}</p><p class="title-creator">${quest.author}</p><p class="quest-desc">${quest.details}</p>`;
             questsList.appendChild(questItem);
+          }else{
+            myQuests.appendChild(questItem);
           }
         });
+
+       
+        if(questsList.innerHTML==""){
+          const noquest = document.createElement("h4");
+          noquest.innerHTML = "No quests posted!";
+          questList.appendChild(noquest);
+        }
+
+        if(myQuests.innerHTML==""){
+          const noquest = document.createElement("h4");
+          noquest.innerHTML = "You haven't posted any quests!";
+          myQuests.appendChild(noquest);
+        }
       }
 
       displayQuests();
@@ -252,10 +325,44 @@
         selectedQuestId = $(this)[0].id;
         var title = $(this).find(".title-quest").html();
         var desc = $(this).find(".quest-desc").html();
-        var creator = $(this).find(".title-creator").html();
+        var creator = $(this).find(".title-creator").attr('data-val');
+        var status = $(this).find(".queststatus").html();
+        var acceptedby = $(this).find(".questaccepted").html();
         $("#modalTitle").html(title);
         $("#modalBody").html(desc);
         $("#modalQuestGiver").html(creator);
+
+        console.log(creator, ' logged in: ', currentLoggedUser.email )
+    
+
+        if(status=="Available"){
+            $("#acceptBtn").show();
+            $("#declineBtn").show();
+            $("#turninBtn").hide();
+
+            if(currentLoggedUser.email==creator){
+              $("#acceptBtn").hide();
+              $("#declineBtn").hide();
+              $("#turninBtn").hide();
+            }
+        }else if(status=="Taken"){
+            $("#acceptBtn").hide();
+            $("#declineBtn").hide();
+            
+
+            if(creator==currentLoggedUser.email){
+              $("#turninBtn").show();
+            }
+        }else if(status=="On going" && acceptedby == currentLoggedUser.email){
+            $("#acceptBtn").hide();
+            $("#declineBtn").hide();
+            $("#turninBtn").hide();
+        }
+        else{
+            $("#acceptBtn").hide();
+            $("#declineBtn").hide();
+            $("#turninBtn").hide();
+        }
         $("#modalQuest").modal("show");
       });
 
@@ -263,6 +370,29 @@
         getQuest();
         $("#modalQuest").modal("hide");
       });
+
+      turninBtn.addEventListener("click", function(){
+        turninQuest();
+      });
+
+      
+
+
+      async function turninQuest() {
+        const questRef = doc(db, "quests", selectedQuestId);
+        const questDoc = await getDoc(questRef);
+
+        if (currentLoggedUser.email == questDoc.data().author) {
+          await updateDoc(questRef, {
+            done: true,
+          });
+          alert("Quest turned in!");
+          $("#modalQuest").modal("hide");
+          displayQuests();
+        } else {
+          alert("You can't turn in this quest. This is another person's quest.")
+        }
+      }
 
       async function getQuest() {
         const questRef = doc(db, "quests", selectedQuestId);
@@ -272,6 +402,8 @@
           await updateDoc(questRef, {
             accepted: currentLoggedUser.email,
           });
+          alert("Quest accepted!");
+          displayQuests();
         } else {
           alert("You can't accept this quest. This is your own quest.")
         }
