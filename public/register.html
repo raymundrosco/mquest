@@ -62,6 +62,7 @@
         </div>
       </div>
     </div>
+    <script src="scripts/sweetalert.min.js"></script>
     <script type="module">
         import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -106,8 +107,17 @@
           } catch (e) {
               const errorCode = e.code;
               const errorMessage = e.message;
-              alert(`Error: ${errorMessage}`);
-              console.error("Error registering: ", errorCode, errorMessage);
+              Swal.fire({
+                    title: "Error!",
+                    text: errorMessage,
+                    icon: "error",
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then((result) => {
+                    console.log("Error registering: ", errorCode, errorMessage);
+                    
+                });
+              
           }
         });
     </script>
