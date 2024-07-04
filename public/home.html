@@ -217,7 +217,7 @@
           const quest = doc.data();
           const questItem = document.createElement("div");
           questItem.className = "quest";
-          questItem.id = `${doc.id}`
+          questItem.id = `${doc.id}`;
           questItem.innerHTML = `<p class="title-quest">${quest.title}</p><p class="title-creator">${quest.author}</p><p class="quest-desc">${quest.details}</p>`;
           questsList.appendChild(questItem);
         });
@@ -235,23 +235,22 @@
         $("#modalQuestGiver").html(creator);
         $("#modalQuest").modal("show");
       });
-    
-      acceptBtn.addEventListener('click', () => {
+
+      acceptBtn.addEventListener("click", () => {
+        getQuest();
+      });
+
+      async function getQuest() {
         const questRef = doc(db, "quests", selectedQuestId);
-        // const questSnap = await getDoc(questRef);
+        const questDoc = await getDoc(questRef);
         const user = auth.currentUser;
-        console.log(user.email);
-        console.log(questDoc);
-        // acceptQuest(questRef);
-      })
 
-      async function acceptQuest(questRef) {
-        await updateDoc(questRef, {
-          accepted: true
-        })
+        if (user.email != questDoc.data().author) {
+          await updateDoc(questRef, {
+            accepted: user.email,
+          });
+        }
       }
-
-      // async function getQuest
     </script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
