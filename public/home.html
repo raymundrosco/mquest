@@ -142,6 +142,7 @@
         setDoc,
         deleteDoc,
         getDocs,
+        updateDoc,
         doc,
         collection,
       } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -168,9 +169,12 @@
       const db = getFirestore(app);
       const auth = getAuth();
 
+      let selectedQuestId;
+
       submitQuest.addEventListener("click", async (e) => {
         const user = auth.currentUser;
         var userEmail = user.email;
+        console.log(user);
         var title = document.getElementById("title").value;
         var details = document.getElementById("textareaCreate").value;
 
@@ -182,7 +186,7 @@
             author: userEmail,
             details: details,
             reward: 5,
-            accepted: false,
+            accepted: "",
             done: false,
           });
           alert("Quest Added");
@@ -212,6 +216,7 @@
           const quest = doc.data();
           const questItem = document.createElement("div");
           questItem.className = "quest";
+          questItem.id = `${doc.id}`
           questItem.innerHTML = `<p class="title-quest">${quest.title}</p><p class="title-creator">${quest.author}</p><p class="quest-desc">${quest.details}</p>`;
           questsList.appendChild(questItem);
         });
@@ -220,7 +225,7 @@
       displayQuests();
 
       $(document).on("click", ".quest", function () {
-        console.log("open");
+        selectedQuestId = $(this)[0].id;
         var title = $(this).find(".title-quest").html();
         var desc = $(this).find(".quest-desc").html();
         var creator = $(this).find(".title-creator").html();
@@ -229,6 +234,20 @@
         $("#modalQuestGiver").html(creator);
         $("#modalQuest").modal("show");
       });
+    
+      acceptBtn.addEventListener('click', () => {
+        const questRef = doc(db, "quests", selectedQuestId);
+        const user = auth.currentUser;
+        console.log(user.email);
+
+        acceptQuest(questRef);
+      })
+
+      async function acceptQuest(questRef) {
+        await updateDoc(questRef, {
+          accepted: true
+        })
+      }
     </script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
