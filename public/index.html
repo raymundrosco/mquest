@@ -48,6 +48,7 @@
         </div>
     </div>
 </div>
+<script src="./scripts/sweetalert.min.js"></script>
 <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.9.4/firebase-app.js';
     import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.9.4/firebase-analytics.js';
@@ -79,14 +80,27 @@
             .then((userCredential) => {
                 // Signed in 
                 const user = userCredential.user;
-                alert("Login successful!");
-                console.log("User signed in: ", user);
-                window.location.assign("./home.html");
+                Swal.fire({
+                    title: "Login successful!",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then((result) => {
+                    console.log("User signed in: ", user);
+                    window.location.assign("./home.html");   
+                });
+               
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                alert(`Error: ${errorMessage}`);
+                Swal.fire({
+                    title: "Login failed!",
+                    text: errorMessage,
+                    icon: "error",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
                 console.error("Error signing in: ", errorCode, errorMessage);
             });
     });

@@ -156,6 +156,7 @@
       </div>
     </div>
 
+    <script src="./scripts/sweetalert.min.js"></script>
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
       import {
@@ -232,9 +233,16 @@
             accepted: "",
             done: false,
           });
-          alert("Quest Added");
-          $("#modalPost").modal("hide");
-          window.location.reload();
+          Swal.fire({
+              icon: "success",
+              title: "Quest added!",
+              showConfirmButton: false,
+              timer: 1500
+          }).then(function(result){
+              $("#modalPost").modal("hide");
+              displayQuests();
+          });
+          
         } catch (e) {
           console.error("Failed to Post Quest!", e);
         }
@@ -381,16 +389,34 @@
       async function turninQuest() {
         const questRef = doc(db, "quests", selectedQuestId);
         const questDoc = await getDoc(questRef);
-
+        $("#modalQuest").modal("hide");
         if (currentLoggedUser.email == questDoc.data().author) {
           await updateDoc(questRef, {
             done: true,
           });
-          alert("Quest turned in!");
-          $("#modalQuest").modal("hide");
-          displayQuests();
+          Swal.fire({
+              icon: "success",
+              title: "Quest turned in!",
+              showConfirmButton: false,
+              timer: 1500
+          }).then(function(result){
+            
+              displayQuests();
+          });
+         
         } else {
-          alert("You can't turn in this quest. This is another person's quest.")
+
+          Swal.fire({
+              icon: "error",
+              title: "Error!",
+              text: "You can't turn in this quest. This is another person's quest.",
+              showConfirmButton: false,
+              timer: 1500
+          }).then(function(result){
+            
+              displayQuests();
+          });
+          
         }
       }
 
@@ -402,10 +428,28 @@
           await updateDoc(questRef, {
             accepted: currentLoggedUser.email,
           });
-          alert("Quest accepted!");
-          displayQuests();
+          Swal.fire({
+              icon: "success",
+              title: "Quest accepted!",
+              showConfirmButton: false,
+              timer: 1500
+          }).then(function(result){
+              $("#modalPost").modal("hide");
+              displayQuests();
+          });
+          
         } else {
-          alert("You can't accept this quest. This is your own quest.")
+          Swal.fire({
+              icon: "danger",
+              title: "Quest not added!",
+              text: "You can't accept this quest. This is your own quest.", 
+              showConfirmButton: false,
+              timer: 1500
+          }).then(function(result){
+              $("#modalPost").modal("hide");
+              
+          });
+          
         }
       }
 
