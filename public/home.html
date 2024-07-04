@@ -142,6 +142,7 @@
         setDoc,
         deleteDoc,
         getDoc,
+        getDocs,
         updateDoc,
         doc,
         collection,
@@ -235,20 +236,20 @@
         $("#modalQuest").modal("show");
       });
     
-      // acceptBtn.addEventListener('click', () => {
-      //   const questRef = doc(db, "quests", selectedQuestId);
-      //   const questDoc = await getDoc(questRef)
-      //   const user = auth.currentUser;
-      //   console.log(user.email);
-      //   console.log(questRef);
-      //   acceptQuest(questRef);
-      // })
+      acceptBtn.addEventListener('click', () => {
+        const questRef = doc(db, "quests", selectedQuestId);
+        // const questSnap = await getDoc(questRef);
+        const user = auth.currentUser;
+        console.log(user.email);
+        console.log(questDoc);
+        // acceptQuest(questRef);
+      })
 
-      // async function acceptQuest(questRef) {
-      //   await updateDoc(questRef, {
-      //     accepted: true
-      //   })
-      // }
+      async function acceptQuest(questRef) {
+        await updateDoc(questRef, {
+          accepted: true
+        })
+      }
 
       // async function getQuest
     </script>
