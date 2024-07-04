@@ -21,7 +21,7 @@
       <div class="profile">
         <div class="profile-pic"></div>
 
-        <p class="name">Christian</p>
+        <p id="profileName" class="name">Christian</p>
 
         <p class="coinCount"><img src="./assets/magicoin.png" alt="" />50</p>
       </div>
@@ -86,6 +86,7 @@
           </div>
           <div class="modal-footer">
             <button
+              id="cancelBtn"
               type="button"
               class="btn btn-secondary"
               data-dismiss="modal"
@@ -169,13 +170,33 @@
       const analytics = getAnalytics(app);
       const db = getFirestore(app);
       const auth = getAuth();
-
       let selectedQuestId;
+      let currentLoggedUser;
+      
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          currentLoggedUser = auth.currentUser;
+          console.log(currentLoggedUser.email);
+          // getUserName(currentLoggedUser.email)
+          document.getElementById("profileName").innerHTML = currentLoggedUser.email
+
+        } else {
+          // User is signed out
+          // ...
+        }
+      });
+
+      // async function getUserName(email) {
+      //   const userRef = doc(db, "users", email);
+      //   const userDoc = await getDoc(userRef);
+      //   name = userDoc.data().author
+      //   changeName(name);
+      // }
+      // function changeName(name) {
+      // }
 
       submitQuest.addEventListener("click", async (e) => {
-        const user = auth.currentUser;
-        var userEmail = user.email;
-        console.log(user);
+        var userEmail = currentLoggedUser.email;
         var title = document.getElementById("title").value;
         var details = document.getElementById("textareaCreate").value;
 
@@ -215,11 +236,13 @@
         questsList.innerHTML = ""; // Clear the list
         querySnapshot.forEach((doc) => {
           const quest = doc.data();
-          const questItem = document.createElement("div");
-          questItem.className = "quest";
-          questItem.id = `${doc.id}`;
-          questItem.innerHTML = `<p class="title-quest">${quest.title}</p><p class="title-creator">${quest.author}</p><p class="quest-desc">${quest.details}</p>`;
-          questsList.appendChild(questItem);
+          if (quest.author != currentLoggedUser.email) {
+            const questItem = document.createElement("div");
+            questItem.className = "quest";
+            questItem.id = `${doc.id}`;
+            questItem.innerHTML = `<p class="title-quest">${quest.title}</p><p class="title-creator">${quest.author}</p><p class="quest-desc">${quest.details}</p>`;
+            questsList.appendChild(questItem);
+          }
         });
       }
 
@@ -238,19 +261,25 @@
 
       acceptBtn.addEventListener("click", () => {
         getQuest();
+        $("#modalQuest").modal("hide");
       });
 
       async function getQuest() {
         const questRef = doc(db, "quests", selectedQuestId);
         const questDoc = await getDoc(questRef);
-        const user = auth.currentUser;
 
-        if (user.email != questDoc.data().author) {
+        if (currentLoggedUser.email != questDoc.data().author) {
           await updateDoc(questRef, {
-            accepted: user.email,
+            accepted: currentLoggedUser.email,
           });
+        } else {
+          alert("You can't accept this quest. This is your own quest.")
         }
       }
+
+      cancelBtn.addEventListener("click", () => {
+        $("#modalQuest").modal("hide");
+      })
     </script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
