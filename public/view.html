@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="styles/index.css">
+   <title>Submitted Quests</title>
+</head>
+
+<body>
+   <div class="container">
+      <h1>Submitted Quests</h1>
+      <div id="questsList">
+         <!-- Quests will be displayed here -->
+      </div>
+      <p class="createQuest"> <a href="create.html"> Create a new quest </a> </p>
+      <p class="createQuest"> Log out </p>
+   </div>
+
+   <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+      import { getFirestore, getDocs, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+            apiKey: "AIzaSyA0UdwF1Aubqz9KVes4GaJzhGDSu49bOHg",
+            authDomain: "testproject-2-427606.firebaseapp.com",
+            projectId: "testproject-2-427606",
+            storageBucket: "testproject-2-427606.appspot.com",
+            messagingSenderId: "277369487861",
+            appId: "1:277369487861:web:133b336b581036c6b9e0bc",
+            measurementId: "G-6VZZ0P0JJ1"
+        };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const db = getFirestore(app);
+
+      // Function to fetch and display quests
+      async function displayQuests() {
+         const querySnapshot = await getDocs(collection(db, "quests"));
+         const questsList = document.getElementById('questsList');
+         questsList.innerHTML = ""; // Clear the list
+         querySnapshot.forEach((doc) => {
+            const quest = doc.data();
+            const questItem = document.createElement('div');
+            questItem.className = 'quest-item';
+            questItem.innerHTML = `<h3>${quest.questTitle}</h3><p>${quest.questContent}</p>`;
+            questsList.appendChild(questItem);
+
+             questItem.innerHTML = `<h3><a href="#" onclick="showQuestDetails('${doc.id}')">${quest.questTitle}</a></h3><p><a href="#" onclick="showQuestDetails('${doc.id}')">${quest.questContent}</a></p>`;
+            questsList.appendChild(questItem);
+         });
+      }
+
+      // Display quests on initial load
+      displayQuests();
+   </script>
+</body>
+
+</html>

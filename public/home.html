@@ -38,7 +38,7 @@
           ><i class="fa fa-user"></i>
           <p>ABOUT</p></a
         >
-        <a href="./Login.html"
+        <a href="./login.html"
           ><i class="fa fa-arrow-left"></i>
           <p>LOG OUT</p></a
         >
@@ -53,52 +53,7 @@
         <input type="text" id="searchText" placeholder="Search for quest" />
       </div>
 
-      <div class="quest-logs">
-        <div class="quest">
-          <p class="title-quest">Quest Title 1</p>
-          <p class="title-creator">Johnson</p>
-          <p class="quest-desc">
-            Testing description need somoene to talk to in Bonoan
-          </p>
-        </div>
-        <div class="quest">
-          <p class="title-quest">Quest Title 2</p>
-          <p class="title-creator">Jennifer</p>
-          <p class="quest-desc">
-            Testing description need somoene to talk to in Bonoan
-          </p>
-        </div>
-        <div class="quest">
-          <p class="title-quest">Quest Title 3</p>
-          <p class="title-creator">Jessica</p>
-          <p class="quest-desc">
-            Testing description need somoene to talk to in Phelan
-          </p>
-        </div>
-        <div class="quest">
-          <p class="title-quest">Quest Title 4</p>
-          <p class="title-creator">John</p>
-          <p class="quest-desc">
-            Testing description need somoene to talk to in Alingal
-          </p>
-        </div>
-        <div class="quest">
-          <p class="title-quest">Quest Title 5</p>
-          <p class="title-creator">Chaz</p>
-          <p class="quest-desc">
-            Testing description need somoene to talk to in Sta Cruz
-          </p>
-        </div>
-        <div class="quest">
-          <p class="title-quest">Quest Title 6</p>
-          <p class="title-creator">Oompaville</p>
-          <p class="quest-desc">
-            Testing description need somoene to talk to in Parking Lot Testing
-            description need somoene to talk to in Parking Lot Testing
-            description need somoene to talk to in Parking LotTesting
-            description need somoene to talk to in Parking Lot
-          </p>
-        </div>
+      <div class="quest-logs" id="questsList">
       </div>
     </main>
 
@@ -157,6 +112,7 @@
         </div>
       </div>
     </div>
+    
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getFirestore, addDoc, setDoc, deleteDoc, getDocs, doc, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -193,6 +149,7 @@
             try {
               const docRef = await addDoc(collection(db, "quests"), {
                 title: title,
+                author: userEmail,
                 details: details,
                 reward: 5,
                 accepted: false,
@@ -200,6 +157,7 @@
               })
               alert('Quest Added');
               $("#modalPost").modal("hide");  
+               window.location.reload()
             } catch (e) {
               console.error("Failed to Post Quest!", e);
             }
@@ -218,13 +176,36 @@
           })
         }
 
-        // deleteQuest.addEventListener('click', (e) => {
-        //     deleteDoc(doc(
-        //         db,
-        //         "quests", 
-        //         // docID
-        //     ));
-        // })
+        async function displayQuests() {
+         const querySnapshot = await getDocs(collection(db, "quests"));
+         const questsList = document.getElementById('questsList');
+         questsList.innerHTML = ""; // Clear the list
+         querySnapshot.forEach((doc) => {
+           const quest = doc.data();
+           console.log(quest.title);
+            const questItem = document.createElement('div');
+            questItem.className = "quest";
+            questItem.innerHTML = `<p class="title-quest">${quest.title}</p><p class="title-creator">${quest.author}</p><p>${quest.details}</p>`;
+            questsList.appendChild(questItem);
+            // questItem.innerHTML = `<h3><a href="#" onclick="showQuestDetails('${doc.id}')">${quest.questTitle}</a></h3><p><a href="#" onclick="showQuestDetails('${doc.id}')">${quest.questContent}</a></p>`;
+            // questsList.appendChild(questItem);
+         });
+      }
+
+      displayQuests();
+
+      var questDiv = document.getElementsByClassName("quest");
+
+      questDiv.addEventListener('click', () => {
+        console.log("open");
+        var title = $(this).find(".title-quest").html();
+        var desc = $(this).find(".quest-desc").html();
+        var creator = $(this).find(".title-creator").html();
+        $("#modalTitle").html(title);
+        $("#modalBody").html(desc);
+        $("#modalQuestGiver").html(creator);
+        $("#modalQuest").modal("show");
+      })
     </script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
@@ -281,15 +262,16 @@
     ></script>
     <script>
       $(document).ready(function () {
-        $("div.quest").click(function () {
-          var title = $(this).find(".title-quest").html();
-          var desc = $(this).find(".quest-desc").html();
-          var creator = $(this).find(".title-creator").html();
-          $("#modalTitle").html(title);
-          $("#modalBody").html(desc);
-          $("#modalQuestGiver").html(creator);
-          $("#modalQuest").modal("show");
-        });
+        // $("div.quest").click(function () {
+        //   console.log("open");
+        //   var title = $(this).find(".title-quest").html();
+        //   var desc = $(this).find(".quest-desc").html();
+        //   var creator = $(this).find(".title-creator").html();
+        //   $("#modalTitle").html(title);
+        //   $("#modalBody").html(desc);
+        //   $("#modalQuestGiver").html(creator);
+        //   $("#modalQuest").modal("show");
+        // });
 
         $("#questBtn").click(function () {
           $("#textareaCreate").val("");
@@ -299,13 +281,13 @@
         $("#searchText").keyup(function () {
           var searchVal = $(this).val();
 
-          $(".quest-logs")
-            .children()
-            .each(function () {
-              $(this).toggle(
-                $(this).text().toLowerCase().indexOf(searchVal) > -1
-              );
-            });
+        $(".quest-logs")
+          .children()
+          .each(function () {
+            $(this).toggle(
+              $(this).text().toLowerCase().indexOf(searchVal) > -1
+            );
+          });
         });
       });
     </script>
