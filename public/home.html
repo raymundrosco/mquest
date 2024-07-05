@@ -10,7 +10,6 @@
       crossorigin="anonymous"
     />
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -298,7 +297,6 @@
           const questItem = document.createElement("div");
           questItem.className = "quest";
           questItem.id = `${doc.id}`;
-
           const questStatus = document.createElement("span");
           var status = "Available";
           questStatus.className = "queststatus badge badge-primary";
@@ -315,28 +313,29 @@
             questStatus.className = "queststatus badge badge-success";
           }
 
+          questStatus.innerHTML = status;
           getAuthor(quest.author).then(() => {
-            console.log(authorUserName);
-            questStatus.innerHTML = status;
-          questItem.innerHTML = `<div class="quest-main">
-                                    <p class="title-quest">${quest.title}</p>
-                                    <p class="title-creator" data-val="${quest.author}">Quest given by ${authorUserName}</p>
-                                    <p class="quest-desc">${quest.details}</p>
-                                  </div>`;
-
-          questItem.appendChild(questStatus);
-
-          const questAccepted = document.createElement("span");
-          questAccepted.className = "questaccepted";
-          questAccepted.innerHTML = quest.accepted;
-          questItem.appendChild(questAccepted);
-
-          if (quest.author != currentLoggedUser.email) {
-            questsList.appendChild(questItem);
-          } else {
-            myQuests.appendChild(questItem);
-          }
+            questItem.innerHTML = `<div class="quest-main">
+                                      <p class="title-quest">${quest.title}</p>
+                                      <p class="title-creator" data-val="${quest.author}">Quest given by ${authorUserName}</p>
+                                      <p class="quest-desc">${quest.details}</p>
+                                    </div>`;
           })
+
+            questItem.appendChild(questStatus);
+  
+            const questAccepted = document.createElement("span");
+            questAccepted.className = "questaccepted";
+            questAccepted.innerHTML = quest.accepted;
+            questItem.appendChild(questAccepted);
+  
+            if (quest.author != currentLoggedUser.email) {
+              questsList.appendChild(questItem);
+            } else {
+              myQuests.appendChild(questItem);
+            }
+          console.log(authorUserName);
+          
         });
 
         if (questsList.innerHTML == "") {
