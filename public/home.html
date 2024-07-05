@@ -62,7 +62,7 @@
         </li>
       </ul>
 
-      <div class="tab-content">
+      <div class="tab-content quest-container">
         <div id="nav-yourquest" class="tab-pane fade in active">
           <div class="postedquests">
             <h3>Posted Quests</h3>
@@ -144,7 +144,7 @@
           <div class="modal-header">
             <div>
               <h5 class="modal-title" id="modalTitle">Modal title</h5>
-              <p>Quest given by <span id="modalQuestGiver">etst</span></p>
+              <p id="modalQuestGiver">Modal author</p>
             </div>
           </div>
           <div class="modal-body" id="modalBody">...</div>
@@ -209,7 +209,7 @@
       let selectedQuestId;
       let currentLoggedUser;
       let acceptedBy;
-      let authorUserName
+      let authorUserName;
 
       onAuthStateChanged(auth, (user) => {
         if (user) {
@@ -254,7 +254,6 @@
             $("#modalPost").modal("hide");
             displayQuests();
           });
-          
         } catch (e) {
           console.error("Failed to Post Quest!", e);
         }
@@ -272,7 +271,6 @@
       }
 
       async function getCoins(userEmail) {
-   
         const querySnapshot = await getDocs(collection(db, "users"));
         querySnapshot.forEach((doc) => {
           const data = doc.data();
@@ -282,7 +280,6 @@
             return data.magiCoins;
           }
         });
-
       }
 
       async function displayQuests() {
@@ -290,10 +287,10 @@
         const questsList = document.getElementById("questsList");
         const myQuests = document.getElementById("myQuests");
         questsList.innerHTML = ""; // Clear the list
-        myQuests.innerHTML="";
+        myQuests.innerHTML = "";
         querySnapshot.forEach((doc) => {
           const quest = doc.data();
-        
+
           const questItem = document.createElement("div");
           questItem.className = "quest";
           questItem.id = `${doc.id}`;
@@ -304,7 +301,10 @@
             status = "On going";
             questStatus.className = "queststatus badge badge-warning";
 
-            if (quest.accepted != currentLoggedUser.email || quest.accepted != "") {
+            if (
+              quest.accepted != currentLoggedUser.email ||
+              quest.accepted != ""
+            ) {
               status = "Taken";
               questStatus.className = "queststatus badge badge-secondary";
             }
@@ -320,22 +320,21 @@
                                       <p class="title-creator" data-val="${quest.author}">Quest given by ${authorUserName}</p>
                                       <p class="quest-desc">${quest.details}</p>
                                     </div>`;
-          })
+          });
 
-            questItem.appendChild(questStatus);
-  
-            const questAccepted = document.createElement("span");
-            questAccepted.className = "questaccepted";
-            questAccepted.innerHTML = quest.accepted;
-            questItem.appendChild(questAccepted);
-  
-            if (quest.author != currentLoggedUser.email) {
-              questsList.appendChild(questItem);
-            } else {
-              myQuests.appendChild(questItem);
-            }
+          questItem.appendChild(questStatus);
+
+          const questAccepted = document.createElement("span");
+          questAccepted.className = "questaccepted";
+          questAccepted.innerHTML = quest.accepted;
+          questItem.appendChild(questAccepted);
+
+          if (quest.author != currentLoggedUser.email) {
+            questsList.appendChild(questItem);
+          } else {
+            myQuests.appendChild(questItem);
+          }
           console.log(authorUserName);
-          
         });
 
         if (questsList.innerHTML == "") {
@@ -355,7 +354,7 @@
 
       async function getAuthor(author) {
         const userRef = doc(db, "users", author);
-        const userDoc = await getDoc(userRef)
+        const userDoc = await getDoc(userRef);
         authorUserName = await userDoc.data().userName;
       }
 
@@ -363,10 +362,10 @@
 
       $(document).on("click", ".quest", function () {
         selectedQuestId = $(this)[0].id;
-        
+
         var title = $(this).find(".title-quest").html();
         var desc = $(this).find(".quest-desc").html();
-        var creator = $(this).find(".title-creator").attr("data-val");
+        var creator = $(this).find(".title-creator").html();
         var status = $(this).find(".queststatus").html();
         var acceptedby = $(this).find(".questaccepted").html();
         acceptedBy = acceptedby;
