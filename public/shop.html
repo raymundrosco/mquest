@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MagiQuest | Home</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="./styles/shop.css" />
+
+    <link rel="icon" type="image/x-icon" href="./assets/Logo1.png" />
+  </head>
+
+  <body>
+    <nav class="nav">
+      <div class="logo-top"></div>
+      <div class="profile">
+        <div class="profile-pic"></div>
+
+        <p id="profileName" class="name"></p>
+
+        <p class="coinCount">
+          <img src="./assets/magicoin.png" alt="" /><span id="coinCount"></span>
+        </p>
+      </div>
+      <div class="links">
+        <a data-link="home" href="./home.html?page=home"
+          ><i class="fa fa-home"></i>
+          <p>HOME</p></a
+        >
+        <a data-link="shop" href="shop.html"
+          ><i class="fa fa-shopping-cart"></i>
+          <p>SHOP</p></a
+        >
+        <a data-link="about" href="./maintenance.html?page=about"
+          ><i class="fa fa-user"></i>
+          <p>ABOUT</p></a
+        >
+        <a href="./index.html"
+          ><i class="fa fa-arrow-left"></i>
+          <p>LOG OUT</p></a
+        >
+      </div>
+    </nav>
+
+    <main>
+      <h1 class="page-title">SHOP</h1>
+
+      <div class="post-container">
+        <input type="text" id="searchText" placeholder="Search for quest" />
+      </div>
+
+      <div class="ShopItems">
+        <section class="shop-section">
+          <div class="container">
+            <h1>ATENEO REWARDS</h1>
+            <div class="products">
+              <div class="product">
+                <img src="./assets/AteneoCap.png" alt="Product 1" />
+                <h2>Ateneo Blue Eagles Cap</h2>
+                <p class="coinCount">
+                  <img src="./assets/magicoin.png" alt="" />850
+                </p>
+                <button>Add to Cart</button>
+                <button>Buy Now</button>
+              </div>
+
+              <div class="product">
+                <img src="./assets/Hoodienb.png" alt="Product 2" />
+                <h2>Ateneo Est.1859 Hoodie Navy Blue</h2>
+                <p class="coinCount">
+                  <img src="./assets/magicoin.png" alt="" />2,500
+                </p>
+                <button>Add to Cart</button>
+                <button>Buy Now</button>
+              </div>
+
+              <div class="product">
+                <img src="./assets/SCARFTEAMATENEO1.png" alt="Product 3" />
+                <h2>Team Ateneo Scarf</h2>
+                <p class="coinCount">
+                  <img src="./assets/magicoin.png" alt="" />400
+                </p>
+                <button>Add to Cart</button>
+                <button>Buy Now</button>
+              </div>
+
+              <div class="product">
+                <img src="./assets/Back_!.png" alt="Product 4" />
+                <h2>Ateneo AMDG Tote Bag</h2>
+                <p class="coinCount">
+                  <img src="./assets/magicoin.png" alt="" />850
+                </p>
+                <button>Add to Cart</button>
+                <button>Buy Now</button>
+              </div>
+
+              <div class="product">
+                <img src="./assets/OBF.png" alt="Product 5" />
+                <h2>Go Ateneo OBF Reversible Bucket Hat</h2>
+                <p class="coinCount">
+                  <img src="./assets/magicoin.png" alt="" />795
+                </p>
+                <button>Add to Cart</button>
+                <button>Buy Now</button>
+              </div>
+
+              <div class="product">
+                <img src="./assets/ONEBIGFIGHT2022.png" alt="Product 6" />
+                <h2>Go Ateneo One Big Fight 2022 Baller</h2>
+                <p class="coinCount">
+                  <img src="./assets/magicoin.png" alt="" />100
+                </p>
+                <button>Add to Cart</button>
+                <button>Buy Now</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import {
+        getFirestore,
+        addDoc,
+        setDoc,
+        deleteDoc,
+        getDoc,
+        getDocs,
+        updateDoc,
+        doc,
+        collection,
+        query,
+        where,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyAL3NGHFIDXyOGpuYRwgTOOw-iIubf6KgE",
+        authDomain: "daanoymichael.firebaseapp.com",
+        databaseURL:
+          "https://daanoymichael-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "daanoymichael",
+        storageBucket: "daanoymichael.appspot.com",
+        messagingSenderId: "167008676312",
+        appId: "1:167008676312:web:4a44cb5ab117c522ddaaad",
+        measurementId: "G-B8G3DNFPHY",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const db = getFirestore(app);
+      const auth = getAuth();
+      let currentLoggedUser;
+
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          currentLoggedUser = auth.currentUser;
+          console.log(currentLoggedUser.email);
+          getUserName(currentLoggedUser.email);
+          getCoins(currentLoggedUser.email)
+        } else {
+          // User is signed out
+          // ...
+        }
+      });
+
+      async function getUserName(email) {
+        const userRef = doc(db, "users", email);
+        const userDoc = await getDoc(userRef);
+        document.getElementById("profileName").innerHTML =
+          userDoc.data().userName;
+      }
+
+      async function getCoins(userEmail) {
+        const querySnapshot = await getDocs(collection(db, "users"));
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          if (data.userEmail == userEmail) {
+            document.getElementById("coinCount").innerHTML = data.magiCoins;
+            console.log("get coins: ", data.magiCoins);
+            return data.magiCoins;
+          }
+        });
+      }
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const loadEl = document.querySelector("#load");
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+        // // The Firebase SDK is initialized and available here!
+        //
+        // firebase.auth().onAuthStateChanged(user => { });
+        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+        // firebase.firestore().doc('/foo/bar').get().then(() => { });
+        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
+        // firebase.messaging().requestPermission().then(() => { });
+        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+        // firebase.analytics(); // call to activate
+        // firebase.analytics().logEvent('tutorial_completed');
+        // firebase.performance(); // call to activate
+        //
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+
+        try {
+          let app = firebase.app();
+          let features = [
+            "auth",
+            "database",
+            "firestore",
+            "functions",
+            "messaging",
+            "storage",
+            "analytics",
+            "remoteConfig",
+            "performance",
+          ].filter((feature) => typeof app[feature] === "function");
+          loadEl.textContent = `Firebase SDK loaded with ${features.join(
+            ", "
+          )}`;
+        } catch (e) {
+          console.log(e);
+        }
+      });
+    </script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+      integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      $(document).ready(function () {
+        $("#searchText").keyup(function () {
+          var searchVal = $(this).val();
+
+          $(".products")
+            .children()
+            .each(function () {
+              $(this).toggle(
+                $(this).text().toLowerCase().indexOf(searchVal) > -1
+              );
+            });
+        });
+      });
+    </script>
+  </body>
+</html>
