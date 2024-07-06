@@ -38,7 +38,7 @@
           ><i class="fa fa-home"></i>
           <p>HOME</p></a
         >
-        <a data-link="shop" href="shop.html"
+        <a data-link="shop" href="./shop.html?page=shop"
           ><i class="fa fa-shopping-cart"></i>
           <p>SHOP</p></a
         >
@@ -54,13 +54,40 @@
     </nav>
 
     <main>
-      <h1 class="page-title">SHOP</h1>
+      
 
-      <div class="post-container">
-        <input type="text" id="searchText" placeholder="Search for quest" />
-      </div>
+      
 
       <div class="ShopItems">
+
+        <div class="post-container">
+          <h1 class="page-title">SHOP</h1>
+          
+          <div class="shop-container">
+            <input type="text" id="searchText" placeholder="Search for item" />
+
+            <div>
+              <button class="cart"><i class="fa fa-shopping-cart fa-3x"></i></button>
+              <span class="cartCount">0</span>
+            </div>
+
+            
+          </div>
+
+          <div class="cart-container">
+            <input type="hidden" id="cartCount" value="0">
+        
+
+            <div class="cart-menu">
+              <h2 class="noitem">No items in cart</h2>
+
+              <div class="cart">
+                <button class="checkout">Proceed to checkout</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <section class="shop-section">
           <div class="container">
             <h1>ATENEO REWARDS</h1>
@@ -69,9 +96,9 @@
                 <img src="./assets/AteneoCap.png" alt="Product 1" />
                 <h2>Ateneo Blue Eagles Cap</h2>
                 <p class="coinCount">
-                  <img src="./assets/magicoin.png" alt="" />850
+                  <img src="./assets/magicoin.png" alt="" /><span>850</span>
                 </p>
-                <button>Add to Cart</button>
+                <button class="btnAddCart">Add to Cart</button>
                 <button>Buy Now</button>
               </div>
 
@@ -79,9 +106,9 @@
                 <img src="./assets/Hoodienb.png" alt="Product 2" />
                 <h2>Ateneo Est.1859 Hoodie Navy Blue</h2>
                 <p class="coinCount">
-                  <img src="./assets/magicoin.png" alt="" />2,500
+                  <img src="./assets/magicoin.png" alt="" /><span>2,500</span>
                 </p>
-                <button>Add to Cart</button>
+                <button class="btnAddCart">Add to Cart</button>
                 <button>Buy Now</button>
               </div>
 
@@ -89,9 +116,9 @@
                 <img src="./assets/SCARFTEAMATENEO1.png" alt="Product 3" />
                 <h2>Team Ateneo Scarf</h2>
                 <p class="coinCount">
-                  <img src="./assets/magicoin.png" alt="" />400
+                  <img src="./assets/magicoin.png" alt="" /><span>400</span>
                 </p>
-                <button>Add to Cart</button>
+                <button class="btnAddCart">Add to Cart</button>
                 <button>Buy Now</button>
               </div>
 
@@ -99,9 +126,9 @@
                 <img src="./assets/Back_!.png" alt="Product 4" />
                 <h2>Ateneo AMDG Tote Bag</h2>
                 <p class="coinCount">
-                  <img src="./assets/magicoin.png" alt="" />850
+                  <img src="./assets/magicoin.png" alt="" /><span>850</span>
                 </p>
-                <button>Add to Cart</button>
+                <button class="btnAddCart">Add to Cart</button>
                 <button>Buy Now</button>
               </div>
 
@@ -109,9 +136,9 @@
                 <img src="./assets/OBF.png" alt="Product 5" />
                 <h2>Go Ateneo OBF Reversible Bucket Hat</h2>
                 <p class="coinCount">
-                  <img src="./assets/magicoin.png" alt="" />795
+                  <img src="./assets/magicoin.png" alt="" /><span>795</span>
                 </p>
-                <button>Add to Cart</button>
+                <button class="btnAddCart">Add to Cart</button>
                 <button>Buy Now</button>
               </div>
 
@@ -119,9 +146,9 @@
                 <img src="./assets/ONEBIGFIGHT2022.png" alt="Product 6" />
                 <h2>Go Ateneo One Big Fight 2022 Baller</h2>
                 <p class="coinCount">
-                  <img src="./assets/magicoin.png" alt="" />100
+                  <img src="./assets/magicoin.png" alt="" /><span>100</span>
                 </p>
-                <button>Add to Cart</button>
+                <button class="btnAddCart">Add to Cart</button>
                 <button>Buy Now</button>
               </div>
             </div>
@@ -239,20 +266,24 @@
         }
       });
     </script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
-    <!-- Latest compiled and minified JavaScript -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
-      integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-      crossorigin="anonymous"
-    ></script>
+    <script src="./scripts/jquery.min.js"></script>
+    <script src="./scripts/bootstrap.min.js"></script>
+    <script src="./scripts/sweetalert.min.js"></script>
     <script>
       $(document).ready(function () {
+
+        let searchParams = new URLSearchParams(window.location.search);
+        let param = searchParams.get("page");
+
+        $(".links > a").each(function () {
+          $(this).removeClass("active");
+          var link = $(this).attr("data-link");
+          if (link == param) {
+            $(this).addClass("active");
+          }
+        });
+
+
         $("#searchText").keyup(function () {
           var searchVal = $(this).val();
 
@@ -263,6 +294,81 @@
                 $(this).text().toLowerCase().indexOf(searchVal) > -1
               );
             });
+        });
+
+        $(".btnAddCart").click(function(){
+
+            Swal.fire({
+              
+              icon: "success",
+              title: "Item added!",
+              showConfirmButton: false,
+              timer: 800,
+            });
+
+            var count = $(".cartCount").html();
+            count++;
+
+            var val = parseInt($("#cartCount").val())+1;
+            $("#cartCount").val(val).trigger('change');
+            $(".cartCount").html(count);
+
+            var product = $(this).closest('div.product');
+            var productname = product.find('h2').html();
+            var productprice = product.find('.coinCount').find('span').html();
+            
+            var itemExist = false;
+
+
+            $('div.cart > div').each(function(){
+                var product = $(this);
+                
+                if(product.attr('data-product')==productname){
+                    
+                    var prodCount = parseInt(product.find('span').html()) + 1;
+                    product.find('span').html(prodCount);
+                    itemExist = true;
+                   
+                    return false;
+                }
+            });
+            
+
+
+            if(itemExist==false){
+                var productlist = $(`<div data-product="${productname}"></div>`)
+                productlist.append(`<h4>${productname}</h4>`);
+                productlist.append(`<div>
+                                      <img src="./assets/magicoin.png">${productprice} X <span>1</span>
+                                    </div>`);
+
+
+                $("div.cart").prepend(productlist);
+
+            }
+            
+        });
+
+        $("button.cart").click(function(){
+
+          if(!$(".cart-container").hasClass('open'))
+              $(".cart-container").addClass('open');
+          else
+              $(".cart-container").removeClass('open');
+          
+        });
+
+
+        $("#cartCount").change(function(){
+          var count = $(this).val();
+
+          if(count > 0){
+              $(".noitem").hide();
+              $("div.cart").show();
+          }else{
+              $(".noitem").show();
+              $("div.cart").hide();
+          }
         });
       });
     </script>
