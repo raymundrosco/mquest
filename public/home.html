@@ -294,6 +294,9 @@
           const questItem = document.createElement("div");
           questItem.className = "quest";
           questItem.id = `${doc.id}`;
+
+
+          //quest status element
           const questStatus = document.createElement("span");
           var status = "Available";
           questStatus.className = "queststatus badge badge-primary";
@@ -313,6 +316,14 @@
             questStatus.className = "queststatus badge badge-success";
           }
 
+
+
+          //accepted by element
+          const questAccepted = document.createElement("span");
+          questAccepted.className = "questaccepted";
+          questAccepted.innerHTML = quest.accepted;
+
+
           questStatus.innerHTML = status;
           getAuthor(quest.author).then(() => {
             questItem.innerHTML = `<div class="quest-main">
@@ -320,14 +331,14 @@
                                       <p class="title-creator" data-val="${quest.author}">Quest given by ${authorUserName}</p>
                                       <p class="quest-desc">${quest.details}</p>
                                     </div>`;
+            questItem.appendChild(questStatus);
+            questItem.appendChild(questAccepted);
           });
 
-          questItem.appendChild(questStatus);
+   
 
-          const questAccepted = document.createElement("span");
-          questAccepted.className = "questaccepted";
-          questAccepted.innerHTML = quest.accepted;
-          questItem.appendChild(questAccepted);
+
+          
 
           if (quest.author != currentLoggedUser.email) {
             questsList.appendChild(questItem);
