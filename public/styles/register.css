@@ -129,6 +129,12 @@ input:focus{
     outline: none;
 }
 
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .login-desc{
     text-align: center;
     color: gray;
