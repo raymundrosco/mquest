@@ -117,6 +117,8 @@ main {
   background-color: gainsboro;
   padding: 2rem;
   height: 100vh;
+  display: grid;
+  grid-template-rows: 8rem 4.2rem 1fr;
 }
 
 main > h1 {
@@ -130,7 +132,7 @@ main > h1 {
   display: flex;
   flex-direction: column;
   row-gap: 1rem;
-  max-height: 550px;
+  max-height: 450px;
   overflow-y: scroll;
 }
 .quest {
@@ -217,7 +219,7 @@ main > h1 {
 #nav-otherquest {
   border: 1px solid gray;
   padding: 1rem;
-  min-height: 600px;
+  min-height: 550px;
 }
 
 #nav-yourquest {
@@ -275,4 +277,8 @@ main > h1 {
   grid-column: 4/5;
   grid-row: 3/4;
   margin-left: auto;
+}
+
+.baliktad {
+  transform: rotate(180deg);
 }
