@@ -449,6 +449,15 @@
         if (currentLoggedUser.email == questDoc.data().author) {
           await updateDoc(questRef, {
             done: true,
+          }).then(async () => {
+            const acceptorRef = doc(db, "users", questDoc.data().accepted);
+            const acceptorDoc = await getDoc(acceptorRef)
+
+            await updateDoc(acceptorRef, {
+              magiCoins: acceptorDoc.data().magiCoins + questDoc.data().reward
+            }).then(() => {
+              console.log(acceptorDoc.data().magiCoins);
+            })
           });
           Swal.fire({
             icon: "success",
