@@ -41,10 +41,10 @@
           ><i class="fa fa-user"></i>
           <p>ABOUT</p></a
         >
-        <a href="./index.html"
+        <span id="logoutBtn"
           ><i class="fa fa-sign-out" aria-hidden="true"></i>
-          <p>LOG OUT</p></a
-        >
+          <p>LOG OUT</p>
+        </span>
       </div>
     </nav>  
 
@@ -56,10 +56,10 @@
 
       <ul class="nav nav-tabs">
         <li class="active navcustom">
-          <a data-toggle="tab" href="#nav-yourquest">Posted Quests</a>
+          <a data-toggle="tab" href="#nav-otherquest">Others' Quests</a>
         </li>
         <li class="navcustom">
-          <a data-toggle="tab" href="#nav-otherquest">Others' Quests</a>
+          <a data-toggle="tab" href="#nav-yourquest">Posted Quests</a>
         </li>
         <li class="navcustom">
           <a data-toggle="tab" href="#nav-acceptedquest">Accepted Quests</a>
@@ -68,17 +68,15 @@
 
       <div class="tab-content">
         <!-- Your quests -->
-        <div id="nav-yourquest" class="tab-pane fade in active">
+        <div id="nav-yourquest" class="tab-pane fade">
           <div class="postedquests">
-            <h3>Posted Quests</h3>
             <button class="questBtn" id="questBtn">Post a Quest</button>
           </div>
           <div class="quest-logs" id="myQuests"></div>
         </div>
         <!-- Other's quests -->
-        <div id="nav-otherquest" class="tab-pane fade">
+        <div id="nav-otherquest" class="tab-pane fade in active">
           <div class="postedquests">
-            <h3>Others' Quests</h3>
             <!-- <input type="text" id="searchText" placeholder="Search for quest" /> -->
           </div>
           <div class="quest-logs" id="questsList"></div>
@@ -86,7 +84,6 @@
         <!-- Accepted quests -->
         <div id="nav-acceptedquest" class="tab-pane fade">
           <div class="postedquests">
-            <h3>Accepted Quests</h3>
             <!-- <input type="text" id="searchText" placeholder="Search for quest" /> -->
           </div>
           <div class="quest-logs" id="acceptedQuests"></div>
@@ -202,6 +199,7 @@
       import {
         getAuth,
         onAuthStateChanged,
+        signOut
       } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
       const firebaseConfig = {
@@ -235,6 +233,22 @@
           // ...
         }
       });
+
+      $("#logoutBtn").click(() => {
+        signOut(auth).then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "Log out succesful!",
+            showConfirmButton: false,
+            timer: 1500
+          }).then(() => {
+            window.location.assign("./index.html");
+          }
+          )
+        }).catch((error) => {
+          // An error happened.
+        });
+      })
 
       async function getUserName(email) {
         const userRef = doc(db, "users", email);

@@ -103,8 +103,15 @@
                   acceptedQuests: [],
                   createdQuests: []
               });
-              window.location.assign("./index.html");
-              console.log("User registered with email: ", userEmail);
+              Swal.fire({
+                    title: "Registration successful!",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then((result) => {
+                  console.log("User registered with email: ", userEmail);
+                  window.location.assign("./index.html");
+                });
           } catch (e) {
               const errorCode = e.code;
               const errorMessage = e.message;

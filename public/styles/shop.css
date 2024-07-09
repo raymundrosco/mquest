@@ -44,7 +44,7 @@ body{
     flex-direction: column;
     row-gap: 1rem;
 }
-.links > a {
+.links > a, #logoutBtn {
     padding: 1rem;
     font-size: 2rem;
     border-radius: 5px;
@@ -54,9 +54,19 @@ body{
     color:white;
 }
 
-.links > a:hover{
+#logoutBtn:hover{
+    background-color: #c7c7c7;
+    color: #023047;
+}
+
+.links > a:hover, #logoutBtn{
     cursor: pointer;
     text-decoration: none;
+}
+
+#logoutBtn > i{
+    font-size: 3rem;
+    margin-right: 1.25rem;
 }
 
 .links > a > i{
@@ -112,11 +122,12 @@ body{
 }
 
 main {
-    padding:  25px 25px 275px 25px;
     padding-left: 275px;
     padding-right: 25px;
+    padding-bottom: 25px;
     width: 100vw;
     height: 100vh;
+    overflow-x: hidden;
   }
 
 .page-title {

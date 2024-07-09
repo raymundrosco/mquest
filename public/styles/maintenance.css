@@ -41,7 +41,8 @@ body{
     flex-direction: column;
     row-gap: 1rem;
 }
-.links > a {
+
+.links > a, #logoutBtn {
     padding: 1rem;
     font-size: 2rem;
     border-radius: 5px;
@@ -51,9 +52,19 @@ body{
     color:white;
 }
 
-.links > a:hover{
+.links > a:hover, #logoutBtn{
     cursor: pointer;
     text-decoration: none;
+}
+
+#logoutBtn:hover{
+    background-color: #c7c7c7;
+    color: #023047;
+}
+
+#logoutBtn > i{
+    font-size: 3rem;
+    margin-right: 1.25rem;
 }
 
 .links > a > i{

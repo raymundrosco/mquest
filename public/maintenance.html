@@ -42,10 +42,10 @@
           ><i class="fa fa-user"></i>
           <p>ABOUT</p></a
         >
-        <a href="./index.html"
+        <span id="logoutBtn"
           ><i class="fa fa-sign-out" aria-hidden="true"></i>
-          <p>LOG OUT</p></a
-        >
+          <p>LOG OUT</p>
+        </span>
       </div>
     </nav>
 
@@ -83,6 +83,7 @@
       import {
         getAuth,
         onAuthStateChanged,
+        signOut
       } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
       const firebaseConfig = {
@@ -116,6 +117,22 @@
           // ...
         }
       });
+
+      $("#logoutBtn").click(() => {
+        signOut(auth).then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "Log out succesful!",
+            showConfirmButton: false,
+            timer: 1500
+          }).then(() => {
+            window.location.assign("./index.html");
+          }
+          )
+        }).catch((error) => {
+          // An error happened.
+        });
+      })
 
       async function getUserName(email) {
         const userRef = doc(db, "users", email);

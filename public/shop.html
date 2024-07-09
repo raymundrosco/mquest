@@ -45,10 +45,10 @@
           ><i class="fa fa-user"></i>
           <p>ABOUT</p></a
         >
-        <a href="./index.html"
+        <span id="logoutBtn"
           ><i class="fa fa-sign-out" aria-hidden="true"></i>
-          <p>LOG OUT</p></a
-        >
+          <p>LOG OUT</p>
+        </span>
       </div>
     </nav>
 
@@ -56,14 +56,14 @@
       <div class="post-container">
         <h1>SHOP</h1>
 
-        <div class="shop-container">
+        <!-- <div class="shop-container">
           <div>
             <button class="cart">
               <i class="fa fa-shopping-cart fa-3x"></i>
             </button>
             <span class="cartCount">0</span>
           </div>
-        </div>
+        </div> -->
 
         <div class="cart-container">
           <input type="hidden" id="cartCount" value="0" />
@@ -85,7 +85,7 @@
             <p class="coinCount">
               <img src="./assets/magicoin.png" alt="" /><span>850</span>
             </p>
-            <button class="btnAddCart">Add to Cart</button>
+            <!-- <button class="btnAddCart">Add to Cart</button> -->
             <button class="buyNowBtn">Buy Now</button>
           </div>
 
@@ -93,9 +93,9 @@
             <img src="./assets/Hoodienb.png" alt="Product 2" />
             <h2>Ateneo Est.1859 Hoodie Navy Blue</h2>
             <p class="coinCount">
-              <img src="./assets/magicoin.png" alt="" /><span>2,500</span>
+              <img src="./assets/magicoin.png" alt="" /><span>2500</span>
             </p>
-            <button class="btnAddCart">Add to Cart</button>
+            <!-- <button class="btnAddCart">Add to Cart</button> -->
             <button class="buyNowBtn">Buy Now</button>
           </div>
 
@@ -105,7 +105,7 @@
             <p class="coinCount">
               <img src="./assets/magicoin.png" alt="" /><span>400</span>
             </p>
-            <button class="btnAddCart">Add to Cart</button>
+            <!-- <button class="btnAddCart">Add to Cart</button> -->
             <button class="buyNowBtn">Buy Now</button>
           </div>
 
@@ -115,7 +115,7 @@
             <p class="coinCount">
               <img src="./assets/magicoin.png" alt="" /><span>850</span>
             </p>
-            <button class="btnAddCart">Add to Cart</button>
+            <!-- <button class="btnAddCart">Add to Cart</button> -->
             <button class="buyNowBtn">Buy Now</button>
           </div>
 
@@ -125,7 +125,7 @@
             <p class="coinCount">
               <img src="./assets/magicoin.png" alt="" /><span>795</span>
             </p>
-            <button class="btnAddCart">Add to Cart</button>
+            <!-- <button class="btnAddCart">Add to Cart</button> -->
             <button class="buyNowBtn">Buy Now</button>
           </div>
 
@@ -135,7 +135,7 @@
             <p class="coinCount">
               <img src="./assets/magicoin.png" alt="" /><span>20</span>
             </p>
-            <button class="btnAddCart">Add to Cart</button>
+            <!-- <button class="btnAddCart">Add to Cart</button> -->
             <button class="buyNowBtn">Buy Now</button>
           </div>
         </div>
@@ -199,6 +199,7 @@
       import {
         getAuth,
         onAuthStateChanged,
+        signOut
       } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
       const firebaseConfig = {
@@ -317,6 +318,21 @@
           });
         }
       }
+      $("#logoutBtn").click(() => {
+        signOut(auth).then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "Log out succesful!",
+            showConfirmButton: false,
+            timer: 1500
+          }).then(() => {
+            window.location.assign("./index.html");
+          }
+          )
+        }).catch((error) => {
+          // An error happened.
+        });
+      })
     </script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
