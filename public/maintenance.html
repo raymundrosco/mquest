@@ -109,17 +109,32 @@
         if (user) {
           currentLoggedUser = auth.currentUser;
           console.log(currentLoggedUser.email);
-          
-          // getUserName(currentLoggedUser.email)
-          document.getElementById("profileName").innerHTML = currentLoggedUser.email
-
+          getUserName(currentLoggedUser.email);
+          getCoins(currentLoggedUser.email)
         } else {
           // User is signed out
           // ...
         }
       });
 
+      async function getUserName(email) {
+        const userRef = doc(db, "users", email);
+        const userDoc = await getDoc(userRef);
+        document.getElementById("profileName").innerHTML =
+          userDoc.data().userName;
+      }
      
+      async function getCoins(userEmail) {
+        const querySnapshot = await getDocs(collection(db, "users"));
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          if (data.userEmail == userEmail) {
+            document.getElementById("coinCount").innerHTML = data.magiCoins;
+            console.log("get coins: ", data.magiCoins);
+            return data.magiCoins;
+          }
+        });
+      }
     </script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {

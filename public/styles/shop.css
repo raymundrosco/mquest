@@ -9,7 +9,6 @@ p{
     margin:0;
 }
 
-
 .logo-top{
     height: 100px;
     background-repeat: no-repeat;
@@ -18,20 +17,25 @@ p{
     background-image: url('../assets/Title&Logoperolight.png');
     border-bottom: 2px solid #023047;
 }
-
-.nav{
+nav.nav {
     background-color: #01273b;
-    padding: 1rem 1rem;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
-    height: 100dvh;
     border-right: 1px solid gray;
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    padding-top: 20px;
 }
 
 body{
     display: grid;
     grid-template-columns: 250px 1fr;
     height: 100vh;
+    width: 100vh;
+    background-color: gainsboro;
+
 }
 
 .links{
@@ -107,20 +111,21 @@ body{
     font-size:2rem;
 }
 
+main {
+    padding:  25px 25px 275px 25px;
+    padding-left: 275px;
+    padding-right: 25px;
+    width: 100vw;
+    height: 100vh;
+  }
 
-
-main{
-    background-color: gainsboro;
-    padding: 2rem;
-}
-main > h1{
+.page-title {
     font-size: 4rem;
     color: #023047;
 }
 
 .ShopItems{
     padding: 1rem;
-    border: 1px solid gray;
     display: flex;
     flex-direction: column;
     row-gap: 1rem;
@@ -271,14 +276,7 @@ button.cart{
     padding: 1rem;
 }
 
-
-
-
-
-
-
 .shop-section {
-    padding: 50px 0;
     background-color: gainsboro;
     text-align: center;
   }

@@ -27,6 +27,7 @@ nav.nav{
     flex-direction: column;
     height: 100dvh;
     border-right: 1px solid gray;
+    padding-top: 20px;
 }
 
 body{

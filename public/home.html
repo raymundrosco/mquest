@@ -46,9 +46,10 @@
           <p>LOG OUT</p></a
         >
       </div>
-    </nav>
+    </nav>  
 
     <main>
+      <h1>HOME</h1>
       <div class="post-container">
         <!-- <button class="questBtn" id="questBtn">Post a Quest</button> -->
       </div>
@@ -60,9 +61,13 @@
         <li class="navcustom">
           <a data-toggle="tab" href="#nav-otherquest">Others' Quests</a>
         </li>
+        <li class="navcustom">
+          <a data-toggle="tab" href="#nav-acceptedquest">Accepted Quests</a>
+        </li>
       </ul>
 
-      <div class="tab-content quest-container">
+      <div class="tab-content">
+        <!-- Your quests -->
         <div id="nav-yourquest" class="tab-pane fade in active">
           <div class="postedquests">
             <h3>Posted Quests</h3>
@@ -70,13 +75,21 @@
           </div>
           <div class="quest-logs" id="myQuests"></div>
         </div>
+        <!-- Other's quests -->
         <div id="nav-otherquest" class="tab-pane fade">
           <div class="postedquests">
             <h3>Others' Quests</h3>
-            <input type="text" id="searchText" placeholder="Search for quest" />
+            <!-- <input type="text" id="searchText" placeholder="Search for quest" /> -->
           </div>
-
           <div class="quest-logs" id="questsList"></div>
+        </div>
+        <!-- Accepted quests -->
+        <div id="nav-acceptedquest" class="tab-pane fade">
+          <div class="postedquests">
+            <h3>Accepted Quests</h3>
+            <!-- <input type="text" id="searchText" placeholder="Search for quest" /> -->
+          </div>
+          <div class="quest-logs" id="acceptedQuests"></div>
         </div>
       </div>
     </main>
@@ -106,6 +119,7 @@
               <textarea
                 id="textareaCreate"
                 placeholder="Enter Quest Details"
+                required
               ></textarea>
             </div>
           </div>
@@ -286,15 +300,16 @@
         const querySnapshot = await getDocs(collection(db, "quests"));
         const questsList = document.getElementById("questsList");
         const myQuests = document.getElementById("myQuests");
+        const acceptedQuests = document.getElementById("acceptedQuests")
         questsList.innerHTML = ""; // Clear the list
         myQuests.innerHTML = "";
+        acceptedQuests.innerHTML = "";
         querySnapshot.forEach((doc) => {
           const quest = doc.data();
 
           const questItem = document.createElement("div");
           questItem.className = "quest";
           questItem.id = `${doc.id}`;
-
 
           //quest status element
           const questStatus = document.createElement("span");
@@ -316,36 +331,30 @@
             questStatus.className = "queststatus badge badge-success";
           }
 
-
-
           //accepted by element
           const questAccepted = document.createElement("span");
           questAccepted.className = "questaccepted";
           questAccepted.innerHTML = quest.accepted;
-
 
           questStatus.innerHTML = status;
           getAuthor(quest.author).then(() => {
             questItem.innerHTML = `<div class="quest-main">
                                       <p class="title-quest">${quest.title}</p>
                                       <p class="title-creator" data-val="${quest.author}">Quest given by ${authorUserName}</p>
-                                      <p class="quest-desc">${quest.details}</p>
+                                      <p class="quest-desc">Description: ${quest.details}</p>
                                     </div>`;
             questItem.appendChild(questStatus);
             questItem.appendChild(questAccepted);
           });
 
-   
-
-
-          
-
           if (quest.author != currentLoggedUser.email) {
             questsList.appendChild(questItem);
+            if (quest.accepted == currentLoggedUser.email) {
+              acceptedQuests.append(questItem);
+            }
           } else {
             myQuests.appendChild(questItem);
           }
-          console.log(authorUserName);
         });
 
         if (questsList.innerHTML == "") {
@@ -358,6 +367,12 @@
           const noquest = document.createElement("h4");
           noquest.innerHTML = "You haven't posted any quests!";
           myQuests.appendChild(noquest);
+        }
+
+        if (acceptedQuests.innerHTML == "") {
+          const noquest = document.createElement("h4");
+          noquest.innerHTML = "You have no accepted quests!";
+          acceptedQuests.appendChild(noquest);
         }
 
         const coins = getCoins(currentLoggedUser.email);

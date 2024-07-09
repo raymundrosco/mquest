@@ -5,6 +5,11 @@
   font-family: "Poppins";
 }
 
+html {
+  height: 100vh;
+  max-height: 100vh;
+}
+
 p {
   margin: 0;
 }
@@ -20,17 +25,21 @@ p {
 
 nav.nav {
   background-color: #01273b;
-  padding: 1rem 1rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  height: 100dvh;
   border-right: 1px solid gray;
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  padding-top: 20px;
 }
 
 body {
   display: grid;
   grid-template-columns: 250px 1fr;
   height: 100vh;
+  max-height: 100vh;
 }
 
 .links {
@@ -115,24 +124,31 @@ body {
 
 main {
   background-color: gainsboro;
-  padding: 2rem;
-  height: 100vh;
+  padding-left: 275px;
+  padding-right: 25px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  width: 100vw;
 }
 
-main > h1 {
+.page-title {
   font-size: 4rem;
   color: #023047;
 }
 
 .quest-logs {
   padding: 1rem;
-
   display: flex;
   flex-direction: column;
   row-gap: 1rem;
-  max-height: 550px;
-  overflow-y: scroll;
 }
+
+.quest-desc {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 .quest {
   padding: 1rem;
   border-radius: 5px;
@@ -178,9 +194,6 @@ main > h1 {
   font-weight: bold;
 }
 
-.post-container > input {
-}
-
 #modalTitle {
   font-weight: bold;
 }
@@ -217,10 +230,14 @@ main > h1 {
 #nav-otherquest {
   border: 1px solid gray;
   padding: 1rem;
-  min-height: 600px;
 }
 
 #nav-yourquest {
+  border: 1px solid gray;
+  padding: 1rem;
+}
+
+#nav-acceptedquest {
   border: 1px solid gray;
   padding: 1rem;
 }
