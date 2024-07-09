@@ -17,7 +17,6 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
     <link rel="stylesheet" href="./styles/shop.css" />
-
     <link rel="icon" type="image/x-icon" href="./assets/Logo1.png" />
   </head>
 
@@ -47,7 +46,7 @@
           <p>ABOUT</p></a
         >
         <a href="./index.html"
-          ><i class="fa fa-arrow-left"></i>
+          ><i class="fa fa-sign-out" aria-hidden="true"></i>
           <p>LOG OUT</p></a
         >
       </div>
@@ -305,6 +304,8 @@
             await updateDoc(userRef, {
               magiCoins: userDoc.data().magiCoins - productPrice
             })
+
+            getCoins(currentLoggedUser.email)
 
             Swal.fire({
             icon: "success",
