@@ -174,6 +174,9 @@
             <button id="turninBtn" type="button" class="btn btn-primary">
               Turn In
             </button>
+            <button id="questModalHideBtn" type="button" class="btn btn-primary">
+              Cancel
+            </button>
           </div>
         </div>
       </div>
@@ -354,7 +357,7 @@
           getAuthor(quest.author).then(() => {
             questItem.innerHTML = `<div class="quest-main">
                                       <p class="title-quest">${quest.title}</p>
-                                      <p class="title-creator" data-val="${quest.author}">Quest given by ${authorUserName}</p>
+                                      <p class="title-creator" data-val="${quest.author}" id="${quest.author}">Quest given by ${authorUserName}</p>
                                       <p class="quest-desc">Description: ${quest.details}</p>
                                     </div>`;
             questItem.appendChild(questStatus);
@@ -404,7 +407,8 @@
 
       $(document).on("click", ".quest", function () {
         selectedQuestId = $(this)[0].id;
-
+        
+        var author = $(this).find(".title-creator")[0].id;
         var title = $(this).find(".title-quest").html();
         var desc = $(this).find(".quest-desc").html();
         var creator = $(this).find(".title-creator").html();
@@ -421,16 +425,17 @@
           $("#acceptBtn").show();
           $("#declineBtn").show();
           $("#turninBtn").hide();
-
-          if (currentLoggedUser.email == creator) {
+          $("#questModalHideBtn").hide();
+          if (currentLoggedUser.email == author) {
             $("#acceptBtn").hide();
             $("#declineBtn").hide();
             $("#turninBtn").hide();
+            $("#questModalHideBtn").show();
           }
         } else if (status == "Taken") {
           $("#acceptBtn").hide();
           $("#declineBtn").hide();
-
+          $("#questModalHideBtn").hide();
           if (creator == currentLoggedUser.email) {
             $("#turninBtn").show();
           }
@@ -441,11 +446,14 @@
           $("#acceptBtn").hide();
           $("#declineBtn").hide();
           $("#turninBtn").hide();
+          $("#questModalHideBtn").hide();
         } else {
           $("#acceptBtn").hide();
           $("#declineBtn").hide();
           $("#turninBtn").hide();
+          $("#questModalHideBtn").show();
         }
+
         $("#modalQuest").modal("show");
       });
 
@@ -456,6 +464,10 @@
 
       turninBtn.addEventListener("click", function () {
         turninQuest();
+      });
+
+      questModalHideBtn.addEventListener("click", () => {
+        $("#modalQuest").modal("hide");
       });
 
       async function turninQuest() {
